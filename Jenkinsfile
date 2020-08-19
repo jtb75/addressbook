@@ -6,6 +6,7 @@ pipeline {
                 echo 'Building Image..'
                 sh """
                 docker build -t webapps/addressbook:latest .
+                docker tag webapps/addressbook:latest webapps/addressbook:$BUILD_NUMBER
                 """
             }
         }
@@ -16,7 +17,7 @@ pipeline {
                 cert: '',
                 dockerAddress: 'tcp://192.168.1.215:2376',
                 ignoreImageBuildTime: true,
-                image: 'webapps/addressbook:latest',
+                image: 'webapps/addressbook:$BUILD_NUMBER',
                 key: '',
                 logLevel: 'info',
                 podmanPath: '',
@@ -50,6 +51,7 @@ pipeline {
                 sh """
                 docker rmi 192.168.1.211:80/webapps/addressbook:$BUILD_NUMBER
                 docker rmi 192.168.1.211:80/webapps/addressbook:latest
+                docker rmi webapps/addressbook:$BUILD_NUMBER
                 docker rmi webapps/addressbook:latest
                 """
             }
